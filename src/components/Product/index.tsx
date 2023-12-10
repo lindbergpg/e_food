@@ -34,8 +34,8 @@ const Product = ({
   const [modalIsVisible, setModalIsVisible] = useState(false)
 
   const getDescricao = (descricao: string) => {
-    if (descricao.length > 162) {
-      return descricao.slice(0, 159) + '...'
+    if (descricao.length > 166) {
+      return descricao.slice(0, 163) + '...'
     }
     return descricao
   }
