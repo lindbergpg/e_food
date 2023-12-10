@@ -71,7 +71,11 @@ const Product = ({
                 {descricaomodal}
                 <br></br>
                 <br></br>
-                Serve: de {porcao}
+                {porcao === '1 pessoa' ? (
+                  <p>Serve: 1 pessoa</p>
+                ) : (
+                  <p>Serve: de {porcao}</p>
+                )}
               </p>
               <ProductButton>Adicionar ao carrinho - {preco}</ProductButton>
             </ContainerInfos>
