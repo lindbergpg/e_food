@@ -20,7 +20,7 @@ export const Capa = styled.img`
 `
 
 export const ContainerInfos = styled.div`
-  padding: 4px 8px 8px;
+  padding: 8px;
 `
 
 export const ContainerTop = styled.div`
