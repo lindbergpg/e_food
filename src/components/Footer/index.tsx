@@ -1,4 +1,4 @@
-import { FooterPag, FooterContainer, SocialMedia } from './styles'
+import { FooterPag, FooterContainer, SocialMedia, LinkHome } from './styles'
 
 import logo from '../../assets/image/logo.svg'
 import instagram from '../../assets/image/instagram.svg'
@@ -8,7 +8,9 @@ import twitter from '../../assets/image/twitter.svg'
 const Footer = () => (
   <FooterPag>
     <FooterContainer className="container">
-      <img src={logo} alt="efood" />
+      <LinkHome to="/">
+        <img src={logo} alt="efood" />
+      </LinkHome>
       <SocialMedia>
         <li>
           <a href="#">

@@ -2,7 +2,8 @@ import {
   HeaderHome,
   HeaderHomeContainer,
   HeaderProd,
-  HeaderProdContainer
+  HeaderProdContainer,
+  LinkHome
 } from './styles'
 
 import logo from '../../assets/image/logo.svg'
@@ -19,7 +20,9 @@ const Header = ({ headerHome }: Props) => {
           <HeaderHome>
             <div className="container">
               <HeaderHomeContainer>
-                <img src={logo} alt="efood" />
+                <LinkHome to="/">
+                  <img src={logo} alt="efood" />
+                </LinkHome>
                 <h1>Viva experiências gastronômicas no conforto da sua casa</h1>
               </HeaderHomeContainer>
             </div>
@@ -29,7 +32,9 @@ const Header = ({ headerHome }: Props) => {
             <div className="container">
               <HeaderProdContainer>
                 <p>Restaurantes</p>
-                <img src={logo} alt="efood" />
+                <LinkHome to="/">
+                  <img src={logo} alt="efood" />
+                </LinkHome>
                 <p>0 produto(s) no carrinho</p>
               </HeaderProdContainer>
             </div>

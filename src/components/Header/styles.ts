@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { colors } from '../../styles'
+import { Link } from 'react-router-dom'
 
 export const HeaderHome = styled.header`
   background-color: ${colors.yellowLight};
@@ -19,6 +20,10 @@ export const HeaderHomeContainer = styled.div`
     font-size: 36px;
     font-weight: 900;
   }
+`
+
+export const LinkHome = styled(Link)`
+  text-decoration: none;
 `
 
 export const HeaderProd = styled.div`

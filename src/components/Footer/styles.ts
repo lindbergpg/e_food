@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { colors } from '../../styles'
+import { Link } from 'react-router-dom'
 
 export const FooterPag = styled.footer`
   background-color: ${colors.yellowLight};
@@ -18,6 +19,10 @@ export const FooterContainer = styled.div`
     font-size: 10px;
     font-weight: 400;
   }
+`
+
+export const LinkHome = styled(Link)`
+  text-decoration: none;
 `
 
 export const SocialMedia = styled.ul`
