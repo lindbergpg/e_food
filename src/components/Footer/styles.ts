@@ -23,10 +23,11 @@ export const FooterContainer = styled.div`
 
 export const LinkHome = styled(Link)`
   text-decoration: none;
+  display: block;
 `
 
 export const SocialMedia = styled.ul`
-  padding-top: 32px;
+  padding-top: 28px;
   padding-bottom: 80px;
   display: flex;
 

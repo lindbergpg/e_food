@@ -9,14 +9,14 @@ export const HeaderHome = styled.header`
 export const HeaderHomeContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   padding: 40px 0;
+  height: 360px;
 
   h1 {
     width: 540px;
     text-align: center;
-    padding-top: 140px;
     font-size: 36px;
     font-weight: 900;
   }
@@ -24,6 +24,7 @@ export const HeaderHomeContainer = styled.div`
 
 export const LinkHome = styled(Link)`
   text-decoration: none;
+  display: block;
 `
 
 export const HeaderProd = styled.div`
