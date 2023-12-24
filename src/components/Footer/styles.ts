@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { colors } from '../../styles'
+import { breackpoints, colors } from '../../styles'
 import { Link } from 'react-router-dom'
 
 export const FooterPag = styled.footer`
@@ -18,6 +18,10 @@ export const FooterContainer = styled.div`
     text-align: center;
     font-size: 10px;
     font-weight: 400;
+
+    @media (max-width: ${breackpoints.tablet}) {
+      width: 90%;
+    }
   }
 `
 

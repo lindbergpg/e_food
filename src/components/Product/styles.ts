@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { colors } from '../../styles'
+import { breackpoints, colors } from '../../styles'
 
 export const ProductCard = styled.div`
   background-color: ${colors.salmon};
@@ -81,6 +81,10 @@ export const Card = styled.div`
   padding: 32px;
   position: relative;
   display: flex;
+
+  @media (max-width: ${breackpoints.tablet}) {
+    display: block;
+  }
 `
 
 export const Close = styled.img`
@@ -94,10 +98,19 @@ export const Pic = styled.img`
   width: 280px;
   height: 280px;
   object-fit: cover;
+
+  @media (max-width: ${breackpoints.tablet}) {
+    width: 100%;
+  }
 `
 
 export const ContainerInfos = styled.div`
   margin-left: 24px;
+
+  @media (max-width: ${breackpoints.tablet}) {
+    margin-left: 0;
+    margin-top: 24px;
+  }
 
   h3 {
     font-size: 18px;

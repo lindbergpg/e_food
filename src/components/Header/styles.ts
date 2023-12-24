@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { colors } from '../../styles'
+import { breackpoints, colors } from '../../styles'
 import { Link } from 'react-router-dom'
 
 export const HeaderHome = styled.header`
@@ -19,12 +19,21 @@ export const HeaderHomeContainer = styled.div`
     text-align: center;
     font-size: 36px;
     font-weight: 900;
+
+    @media (max-width: ${breackpoints.tablet}) {
+      width: 90%;
+      font-size: 24px;
+    }
   }
 `
 
 export const LinkHome = styled(Link)`
   text-decoration: none;
   display: block;
+
+  @media (max-width: ${breackpoints.tablet}) {
+    margin: 16px 0;
+  }
 `
 
 export const HeaderProd = styled.div`
@@ -36,6 +45,12 @@ export const HeaderProdContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 64px 0;
+
+  @media (max-width: ${breackpoints.tablet}) {
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+  }
 
   p {
     font-size: 18px;

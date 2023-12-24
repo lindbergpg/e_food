@@ -64,7 +64,7 @@ const Product = ({ foto, descricao, nome, porcao, preco, product }: Props) => {
           <Card>
             <Close
               src={close}
-              alt=""
+              alt="x"
               onClick={() => setModalIsVisible(false)}
             />
             <div>
