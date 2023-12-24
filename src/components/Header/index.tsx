@@ -1,18 +1,31 @@
+import { useDispatch, useSelector } from 'react-redux'
+
 import {
   HeaderHome,
   HeaderHomeContainer,
   HeaderProd,
   HeaderProdContainer,
-  LinkHome
+  LinkHome,
+  CartButton
 } from './styles'
 
 import logo from '../../assets/image/logo.svg'
+
+import { open } from '../../store/reducers/cart'
+import { RootReducer } from '../../store'
 
 type Props = {
   headerHome: boolean
 }
 
 const Header = ({ headerHome }: Props) => {
+  const dispatch = useDispatch()
+  const { items } = useSelector((state: RootReducer) => state.cart)
+
+  const openCart = () => {
+    dispatch(open())
+  }
+
   return (
     <>
       <div>
@@ -35,7 +48,9 @@ const Header = ({ headerHome }: Props) => {
                 <LinkHome to="/">
                   <img src={logo} alt="efood" />
                 </LinkHome>
-                <p>0 produto(s) no carrinho</p>
+                <CartButton onClick={openCart}>
+                  {items.length} produto(s) no carrinho
+                </CartButton>
               </HeaderProdContainer>
             </div>
           </HeaderProd>

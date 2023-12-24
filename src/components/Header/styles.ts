@@ -42,3 +42,8 @@ export const HeaderProdContainer = styled.div`
     font-weight: 900;
   }
 `
+
+export const CartButton = styled.a`
+  font-size: 18px;
+  font-weight: 900;
+`

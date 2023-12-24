@@ -1,3 +1,4 @@
+import { useDispatch } from 'react-redux'
 import { useState } from 'react'
 
 import Button from '../Button'
@@ -13,24 +14,21 @@ import { Card, Close, ContainerInfos, Pic, Modal } from './styles'
 
 import close from '../../assets/image/close.png'
 
+import { add, open } from '../../store/reducers/cart'
+import { CardapioItem } from '../../Pages/Home'
+
 type Props = {
   foto: string
-  preco: string
   nome: string
   descricao: string
   descricaomodal: string
   porcao: string
+  preco: string
   id: number
+  product: CardapioItem
 }
 
-const Product = ({
-  foto,
-  preco,
-  nome,
-  descricao,
-  descricaomodal,
-  porcao
-}: Props) => {
+const Product = ({ foto, descricao, nome, porcao, preco, product }: Props) => {
   const [modalIsVisible, setModalIsVisible] = useState(false)
 
   const getDescricao = (descricao: string) => {
@@ -38,6 +36,13 @@ const Product = ({
       return descricao.slice(0, 163) + '...'
     }
     return descricao
+  }
+
+  const dispatch = useDispatch()
+
+  const addToCart = () => {
+    dispatch(add(product))
+    dispatch(open())
   }
 
   return (
@@ -68,7 +73,7 @@ const Product = ({
             <ContainerInfos>
               <h3>{nome}</h3>
               <p>
-                {descricaomodal}
+                {descricao}
                 <br></br>
                 <br></br>
                 {porcao === '1 pessoa' ? (
@@ -77,7 +82,9 @@ const Product = ({
                   <p>Serve: de {porcao}</p>
                 )}
               </p>
-              <ProductButton>Adicionar ao carrinho - {preco}</ProductButton>
+              <ProductButton onClick={addToCart}>
+                Adicionar ao carrinho - {preco}
+              </ProductButton>
             </ContainerInfos>
           </Card>
         </div>

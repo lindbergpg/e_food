@@ -20,6 +20,7 @@ const ProductsList = ({ items }: Props) => {
         <List>
           {items.map((product) => (
             <Product
+              product={product}
               key={product.id}
               foto={product.foto}
               nome={product.nome}
