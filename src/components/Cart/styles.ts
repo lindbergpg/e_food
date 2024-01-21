@@ -2,6 +2,11 @@ import styled from 'styled-components'
 import { colors } from '../../styles'
 
 import clear from '../../assets/image/clear.png'
+import { ProductButton } from '../Product/styles'
+
+type InputGroupProps = {
+  maxWidth?: string
+}
 
 export const CartContainer = styled.div`
   position: fixed;
@@ -15,6 +20,28 @@ export const CartContainer = styled.div`
 
   &.is-open {
     display: flex;
+  }
+`
+
+export const ConfirmContainer = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  justify-content: flex-end;
+  z-index: 1;
+
+  &.is-open {
+    display: flex;
+  }
+
+  p {
+    color: ${colors.yellowLight};
+    font-size: 14px;
+    line-height: 22px;
+    margin-bottom: 24px;
   }
 `
 
@@ -34,6 +61,13 @@ export const SideBar = styled.div`
   padding: 32px 8px;
   max-width: 360px;
   width: 100%;
+
+  > h3 {
+    color: ${colors.yellowLight};
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 16px;
+  }
 `
 
 export const Amount = styled.div`
@@ -80,5 +114,46 @@ export const CartItem = styled.li`
     bottom: 8px;
     right: 8px;
     cursor: pointer;
+  }
+`
+
+export const InputGroup = styled.div<InputGroupProps>`
+  flex: auto;
+
+  max-width: ${(props) => props.maxWidth || 'auto'};
+
+  label {
+    font-size: 14px;
+    font-weight: bold;
+    color: ${colors.yellowLight};
+    margin: 8px 0;
+    display: block;
+  }
+
+  input {
+    border: 2px solid ${colors.yellowLight};
+    background-color: ${colors.yellowLight};
+    height: 32px;
+    width: 100%;
+    padding: 0 8px;
+    outline: none;
+  }
+
+  small {
+    color: ${colors.yellowLight};
+    font-size: 10px;
+  }
+`
+
+export const InputGroupCepNumber = styled.div`
+  display: flex;
+  gap: 34px;
+`
+
+export const ButtonGroup = styled.div`
+  margin-top: 24px;
+
+  ${ProductButton} {
+    margin-bottom: 8px;
   }
 `
