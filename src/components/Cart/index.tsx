@@ -1,32 +1,22 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-
-import { ProductButton } from '../Product/styles'
-import {
-  CartContainer,
-  Overlay,
-  SideBar,
-  CartItem,
-  Amount,
-  InputGroup,
-  InputGroupCepNumber,
-  ButtonGroup,
-  ConfirmContainer
-} from './styles'
+import InputMask from 'react-input-mask'
 
 import { RootReducer } from '../../store'
-
-import { close, remove } from '../../store/reducers/cart'
-import { formatPrice } from '../ProductsList'
+import { close, remove, clear } from '../../store/reducers/cart'
 import { usePurchaseMutation } from '../../services/api'
+import { getTotalPrice, parseToBrl } from '../../Utils'
+
+import { ProductButton } from '../Product/styles'
+import * as S from './styles'
+import { ConfirmLinkHome } from './styles'
 
 const Cart = () => {
   const { isOpen, items } = useSelector((state: RootReducer) => state.cart)
 
-  const [purchase, { isError, isLoading, isSuccess, data }] =
-    usePurchaseMutation()
+  const [purchase, { isSuccess, data, isLoading }] = usePurchaseMutation()
 
   const dispatch = useDispatch()
 
@@ -36,12 +26,6 @@ const Cart = () => {
 
   const removeItem = (id: number) => {
     dispatch(remove(id))
-  }
-
-  const getTotalPrice = () => {
-    return items.reduce((acumulador, valorAtual) => {
-      return (acumulador += valorAtual.preco)
-    }, 0)
   }
 
   const formVal = useFormik({
@@ -97,12 +81,10 @@ const Cart = () => {
     }),
     onSubmit: (values) => {
       purchase({
-        products: [
-          {
-            id: 1,
-            price: 10
-          }
-        ],
+        products: items.map((item) => ({
+          id: item.id,
+          price: item.preco
+        })),
         delivery: {
           receiver: values.name,
           address: {
@@ -119,8 +101,8 @@ const Cart = () => {
             number: values.cardNumber,
             code: Number(values.cardCode),
             expires: {
-              month: 1,
-              year: 2024
+              month: Number(values.expiresMonth),
+              year: Number(values.expiresYear)
             }
           }
         }
@@ -142,42 +124,60 @@ const Cart = () => {
     setActiveTab('payment')
   }
 
-  const getErrorMessage = (fieldName: string, message?: string) => {
+  const checkInputHasError = (fieldName: string) => {
     const isTouched = fieldName in formVal.touched
     const isInvalid = fieldName in formVal.errors
+    const hasError = isTouched && isInvalid
 
-    if (isTouched && isInvalid) return message
-    return ''
+    return hasError
   }
+
+  useEffect(() => {
+    if (isSuccess) {
+      dispatch(clear())
+    }
+  }, [isSuccess, dispatch])
 
   const handle = () => {
     if (activeTab === 'cart') {
       return (
         <>
-          <CartContainer className={isOpen ? 'is-open' : ''}>
-            <Overlay onClick={closeCart} />
-            <SideBar>
-              <ul>
-                {items.map((item) => (
-                  <CartItem key={item.id}>
-                    <img src={item.foto} alt="" />
-                    <div>
-                      <h3>{item.nome}</h3>
-                      <span>{formatPrice(item.preco)}</span>
-                    </div>
-                    <button type="button" onClick={() => removeItem(item.id)} />
-                  </CartItem>
-                ))}
-              </ul>
-              <Amount>
-                <p>Valor total</p>
-                <p>{formatPrice(getTotalPrice())}</p>
-              </Amount>
-              <ProductButton onClick={() => handleDelivey()}>
-                Continuar com a entrega
-              </ProductButton>
-            </SideBar>
-          </CartContainer>
+          <S.CartContainer className={isOpen ? 'is-open' : ''}>
+            <S.Overlay onClick={closeCart} />
+            <S.SideBar>
+              {items.length > 0 ? (
+                <>
+                  <ul>
+                    {items.map((item) => (
+                      <S.CartItem key={item.id}>
+                        <img src={item.foto} alt="" />
+                        <div>
+                          <h3>{item.nome}</h3>
+                          <span>{parseToBrl(item.preco)}</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => removeItem(item.id)}
+                        />
+                      </S.CartItem>
+                    ))}
+                  </ul>
+                  <S.Amount>
+                    <p>Valor total</p>
+                    <p>{parseToBrl(getTotalPrice(items))}</p>
+                  </S.Amount>
+                  <ProductButton onClick={() => handleDelivey()}>
+                    Continuar com a entrega
+                  </ProductButton>
+                </>
+              ) : (
+                <p className="empty-text">
+                  O carrinho está vazio, adicione pelo menos um produto para
+                  continuar com a compra.
+                </p>
+              )}
+            </S.SideBar>
+          </S.CartContainer>
         </>
       )
     }
@@ -185,12 +185,12 @@ const Cart = () => {
     if (activeTab === 'delivery') {
       return (
         <>
-          <CartContainer className={isOpen ? 'is-open' : ''}>
-            <Overlay onClick={closeCart} />
-            <SideBar>
+          <S.CartContainer className={isOpen ? 'is-open' : ''}>
+            <S.Overlay onClick={closeCart} />
+            <S.SideBar>
               <h3>Entrega</h3>
               <form onSubmit={formVal.handleSubmit}>
-                <InputGroup>
+                <S.InputGroup>
                   <label htmlFor="name">Quem irá receber</label>
                   <input
                     type="text"
@@ -199,10 +199,10 @@ const Cart = () => {
                     value={formVal.values.name}
                     onChange={formVal.handleChange}
                     onBlur={formVal.handleBlur}
+                    className={checkInputHasError('name') ? 'error' : ''}
                   />
-                  <small>{getErrorMessage('name', formVal.errors.name)}</small>
-                </InputGroup>
-                <InputGroup>
+                </S.InputGroup>
+                <S.InputGroup>
                   <label htmlFor="address">Endereço</label>
                   <input
                     type="text"
@@ -211,12 +211,10 @@ const Cart = () => {
                     value={formVal.values.address}
                     onChange={formVal.handleChange}
                     onBlur={formVal.handleBlur}
+                    className={checkInputHasError('address') ? 'error' : ''}
                   />
-                  <small>
-                    {getErrorMessage('address', formVal.errors.address)}
-                  </small>
-                </InputGroup>
-                <InputGroup>
+                </S.InputGroup>
+                <S.InputGroup>
                   <label htmlFor="city">Cidade</label>
                   <input
                     type="text"
@@ -225,23 +223,24 @@ const Cart = () => {
                     value={formVal.values.city}
                     onChange={formVal.handleChange}
                     onBlur={formVal.handleBlur}
+                    className={checkInputHasError('city') ? 'error' : ''}
                   />
-                  <small>{getErrorMessage('city', formVal.errors.city)}</small>
-                </InputGroup>
-                <InputGroupCepNumber>
-                  <InputGroup>
+                </S.InputGroup>
+                <S.InputGroupCepNumber>
+                  <S.InputGroup>
                     <label htmlFor="cep">CEP</label>
-                    <input
+                    <InputMask
                       type="text"
                       name="cep"
                       id="cep"
                       value={formVal.values.cep}
                       onChange={formVal.handleChange}
                       onBlur={formVal.handleBlur}
+                      className={checkInputHasError('cep') ? 'error' : ''}
+                      mask="99.999-999"
                     />
-                    <small>{getErrorMessage('cep', formVal.errors.cep)}</small>
-                  </InputGroup>
-                  <InputGroup>
+                  </S.InputGroup>
+                  <S.InputGroup>
                     <label htmlFor="number">Número</label>
                     <input
                       type="text"
@@ -250,13 +249,11 @@ const Cart = () => {
                       value={formVal.values.number}
                       onChange={formVal.handleChange}
                       onBlur={formVal.handleBlur}
+                      className={checkInputHasError('number') ? 'error' : ''}
                     />
-                    <small>
-                      {getErrorMessage('number', formVal.errors.number)}
-                    </small>
-                  </InputGroup>
-                </InputGroupCepNumber>
-                <InputGroup>
+                  </S.InputGroup>
+                </S.InputGroupCepNumber>
+                <S.InputGroup>
                   <label htmlFor="complement">Complemento (opcional)</label>
                   <input
                     type="text"
@@ -265,22 +262,20 @@ const Cart = () => {
                     value={formVal.values.complement}
                     onChange={formVal.handleChange}
                     onBlur={formVal.handleBlur}
+                    className={checkInputHasError('complement') ? 'error' : ''}
                   />
-                  <small>
-                    {getErrorMessage('complement', formVal.errors.complement)}
-                  </small>
-                </InputGroup>
-                <ButtonGroup>
+                </S.InputGroup>
+                <S.ButtonGroup>
                   <ProductButton onClick={() => handlePayment()}>
                     Continuar com o pagamento
                   </ProductButton>
                   <ProductButton onClick={() => handleCart()}>
                     Voltar para o carrinho
                   </ProductButton>
-                </ButtonGroup>
+                </S.ButtonGroup>
               </form>
-            </SideBar>
-          </CartContainer>
+            </S.SideBar>
+          </S.CartContainer>
         </>
       )
     }
@@ -288,12 +283,14 @@ const Cart = () => {
     if (activeTab === 'payment') {
       return (
         <>
-          <CartContainer className={isOpen ? 'is-open' : ''}>
-            <Overlay onClick={closeCart} />
-            <SideBar>
-              <h3>Pagamento - Valor a pagar R$ 190,90</h3>
+          <S.CartContainer className={isOpen ? 'is-open' : ''}>
+            <S.Overlay onClick={closeCart} />
+            <S.SideBar>
+              <h3>
+                Pagamento - Valor a pagar {parseToBrl(getTotalPrice(items))}
+              </h3>
               <form onSubmit={formVal.handleSubmit}>
-                <InputGroup>
+                <S.InputGroup>
                   <label htmlFor="cardName">Nome no cartão</label>
                   <input
                     type="text"
@@ -302,86 +299,84 @@ const Cart = () => {
                     value={formVal.values.cardName}
                     onChange={formVal.handleChange}
                     onBlur={formVal.handleBlur}
+                    className={checkInputHasError('cardName') ? 'error' : ''}
                   />
-                  <small>
-                    {getErrorMessage('cardName', formVal.errors.cardName)}
-                  </small>
-                </InputGroup>
-                <InputGroupCepNumber>
-                  <InputGroup maxWidth="228px">
+                </S.InputGroup>
+                <S.InputGroupCepNumber>
+                  <S.InputGroup maxWidth="228px">
                     <label htmlFor="cardNumber">Número do cartão</label>
-                    <input
+                    <InputMask
                       type="text"
                       name="cardNumber"
                       id="cardNumber"
                       value={formVal.values.cardNumber}
                       onChange={formVal.handleChange}
                       onBlur={formVal.handleBlur}
+                      className={
+                        checkInputHasError('cardNumber') ? 'error' : ''
+                      }
+                      mask="9999 9999 9999 9999"
                     />
-                    <small>
-                      {getErrorMessage('cardNumber', formVal.errors.cardNumber)}
-                    </small>
-                  </InputGroup>
-                  <InputGroup maxWidth="87px">
+                  </S.InputGroup>
+                  <S.InputGroup maxWidth="87px">
                     <label htmlFor="cardCode">CVV</label>
-                    <input
+                    <InputMask
                       type="text"
                       name="cardCode"
                       id="cardCode"
                       value={formVal.values.cardCode}
                       onChange={formVal.handleChange}
                       onBlur={formVal.handleBlur}
+                      className={checkInputHasError('cardCode') ? 'error' : ''}
+                      mask="999"
                     />
-                    <small>
-                      {getErrorMessage('cardCode', formVal.errors.cardCode)}
-                    </small>
-                  </InputGroup>
-                </InputGroupCepNumber>
-                <InputGroupCepNumber>
-                  <InputGroup>
+                  </S.InputGroup>
+                </S.InputGroupCepNumber>
+                <S.InputGroupCepNumber>
+                  <S.InputGroup>
                     <label htmlFor="expiresMonth">Mês de vencimento</label>
-                    <input
+                    <InputMask
                       type="text"
                       name="expiresMonth"
                       id="expiresMonth"
                       value={formVal.values.expiresMonth}
                       onChange={formVal.handleChange}
                       onBlur={formVal.handleBlur}
+                      className={
+                        checkInputHasError('expiresMonth') ? 'error' : ''
+                      }
+                      mask="99"
                     />
-                    <small>
-                      {getErrorMessage(
-                        'expiresMonth',
-                        formVal.errors.expiresMonth
-                      )}
-                    </small>
-                  </InputGroup>
-                  <InputGroup>
+                  </S.InputGroup>
+                  <S.InputGroup>
                     <label htmlFor="expiresYear">Ano de vencimento</label>
-                    <input
+                    <InputMask
                       type="text"
                       name="expiresYear"
                       id="expiresYear"
                       value={formVal.values.expiresYear}
                       onChange={formVal.handleChange}
                       onBlur={formVal.handleBlur}
+                      className={
+                        checkInputHasError('expiresYear') ? 'error' : ''
+                      }
+                      mask="99"
                     />
-                    <small>
-                      {getErrorMessage(
-                        'expiresYear',
-                        formVal.errors.expiresYear
-                      )}
-                    </small>
-                  </InputGroup>
-                </InputGroupCepNumber>
-                <ButtonGroup>
-                  <ProductButton>Finalizar pagamento</ProductButton>
+                  </S.InputGroup>
+                </S.InputGroupCepNumber>
+                <S.ButtonGroup>
+                  <ProductButton disabled={isLoading}>
+                    {isLoading
+                      ? 'Finalizando pagamento...'
+                      : 'Finalizar pagamento'}
+                  </ProductButton>
                   <ProductButton onClick={() => handleDelivey()}>
                     Voltar para a edição de endereço
                   </ProductButton>
-                </ButtonGroup>
+                </S.ButtonGroup>
               </form>
-            </SideBar>
-          </CartContainer>
+            </S.SideBar>
+          </S.CartContainer>
         </>
       )
     }
@@ -389,10 +384,10 @@ const Cart = () => {
 
   return (
     <>
-      {isSuccess ? (
-        <ConfirmContainer className={isOpen ? 'is-open' : ''}>
-          <Overlay onClick={closeCart} />
-          <SideBar>
+      {isSuccess && data ? (
+        <S.ConfirmContainer className={isOpen ? 'is-open' : ''}>
+          <S.Overlay onClick={closeCart} />
+          <S.SideBar>
             <h3>Pedido realizado - {data.orderId}</h3>
             <p>
               Estamos felizes em informar que seu pedido já está em processo de
@@ -411,9 +406,11 @@ const Cart = () => {
               Esperamos que desfrute de uma deliciosa e agradável experiência
               gastronômica. Bom apetite!
             </p>
-            <ProductButton>Concluir</ProductButton>
-          </SideBar>
-        </ConfirmContainer>
+            <ConfirmLinkHome to="/" onClick={closeCart}>
+              Concluir
+            </ConfirmLinkHome>
+          </S.SideBar>
+        </S.ConfirmContainer>
       ) : (
         <div>{handle()}</div>
       )}

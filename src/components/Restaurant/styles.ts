@@ -12,7 +12,7 @@ export const RestaurantCard = styled.div`
   }
 `
 
-export const Capa = styled.img`
+export const Cover = styled.img`
   display: block;
   width: 100%;
   height: 217px;
@@ -37,12 +37,12 @@ export const ContainerTop = styled.div`
   }
 `
 
-export const Titulo = styled.h2`
+export const Title = styled.h2`
   font-size: 18px;
   font-weight: 700;
 `
 
-export const Descricao = styled.h2`
+export const Description = styled.h2`
   font-size: 14px;
   font-weight: 400;
   line-height: 22px;

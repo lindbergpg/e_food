@@ -2,20 +2,10 @@ import { useDispatch } from 'react-redux'
 import { useState } from 'react'
 
 import Button from '../Button'
-import {
-  ProductCard,
-  ProductName,
-  ProductDescription,
-  ProductButton,
-  ProductPic
-} from './styles'
-
-import { Card, Close, ContainerInfos, Pic, Modal } from './styles'
-
-import close from '../../assets/image/close.png'
-
 import { add, open } from '../../store/reducers/cart'
-import { CardapioItem } from '../../Pages/Home'
+import closeIcom from '../../assets/image/close.png'
+
+import * as S from './styles'
 
 type Props = {
   foto: string
@@ -43,14 +33,15 @@ const Product = ({ foto, descricao, nome, porcao, preco, product }: Props) => {
   const addToCart = () => {
     dispatch(add(product))
     dispatch(open())
+    setModalIsVisible(false)
   }
 
   return (
     <>
-      <ProductCard>
-        <ProductPic src={foto} alt={nome} />
-        <ProductName>{nome}</ProductName>
-        <ProductDescription>{getDescricao(descricao)}</ProductDescription>
+      <S.ProductCard>
+        <S.ProductPic src={foto} alt={nome} />
+        <S.ProductName>{nome}</S.ProductName>
+        <S.ProductDescription>{getDescricao(descricao)}</S.ProductDescription>
         <Button
           type="button"
           variant="secondary"
@@ -58,19 +49,19 @@ const Product = ({ foto, descricao, nome, porcao, preco, product }: Props) => {
         >
           Mais detalhes
         </Button>
-      </ProductCard>
-      <Modal className={modalIsVisible ? 'visible' : ''}>
+      </S.ProductCard>
+      <S.Modal className={modalIsVisible ? 'visible' : ''}>
         <div className="container">
-          <Card>
-            <Close
-              src={close}
+          <S.Card>
+            <S.Close
+              src={closeIcom}
               alt="x"
               onClick={() => setModalIsVisible(false)}
             />
             <div>
-              <Pic src={foto} alt={nome} />
+              <S.Pic src={foto} alt={nome} />
             </div>
-            <ContainerInfos>
+            <S.ContainerInfos>
               <h3>{nome}</h3>
               <p>
                 {descricao}
@@ -82,14 +73,14 @@ const Product = ({ foto, descricao, nome, porcao, preco, product }: Props) => {
                   <p>Serve: de {porcao}</p>
                 )}
               </p>
-              <ProductButton onClick={addToCart}>
+              <S.ProductButton onClick={addToCart}>
                 Adicionar ao carrinho - {preco}
-              </ProductButton>
-            </ContainerInfos>
-          </Card>
+              </S.ProductButton>
+            </S.ContainerInfos>
+          </S.Card>
         </div>
         <div className="overlay" onClick={() => setModalIsVisible(false)}></div>
-      </Modal>
+      </S.Modal>
     </>
   )
 }

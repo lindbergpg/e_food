@@ -1,5 +1,7 @@
+import { Link } from 'react-router-dom'
+
 import styled from 'styled-components'
-import { colors } from '../../styles'
+import { breackpoints, colors } from '../../styles'
 
 import clear from '../../assets/image/clear.png'
 import { ProductButton } from '../Product/styles'
@@ -23,28 +25,6 @@ export const CartContainer = styled.div`
   }
 `
 
-export const ConfirmContainer = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: none;
-  justify-content: flex-end;
-  z-index: 1;
-
-  &.is-open {
-    display: flex;
-  }
-
-  p {
-    color: ${colors.yellowLight};
-    font-size: 14px;
-    line-height: 22px;
-    margin-bottom: 24px;
-  }
-`
-
 export const Overlay = styled.div`
   position: absolute;
   top: 0;
@@ -62,11 +42,22 @@ export const SideBar = styled.div`
   max-width: 360px;
   width: 100%;
 
+  @media (max-width: ${breackpoints.tablet}) {
+    max-width: 320px;
+  }
+
   > h3 {
     color: ${colors.yellowLight};
     font-size: 16px;
     font-weight: bold;
     margin-bottom: 16px;
+  }
+
+  .empty-text {
+    color: ${colors.yellowLight};
+    font-size: 16px;
+    line-height: 22px;
+    text-align: center;
   }
 `
 
@@ -137,6 +128,10 @@ export const InputGroup = styled.div<InputGroupProps>`
     width: 100%;
     padding: 0 8px;
     outline: none;
+
+    &.error {
+      border: 2px solid red;
+    }
   }
 
   small {
@@ -156,4 +151,41 @@ export const ButtonGroup = styled.div`
   ${ProductButton} {
     margin-bottom: 8px;
   }
+`
+
+export const ConfirmContainer = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  justify-content: flex-end;
+  z-index: 1;
+
+  &.is-open {
+    display: flex;
+  }
+
+  p {
+    color: ${colors.yellowLight};
+    font-size: 14px;
+    line-height: 22px;
+    margin-bottom: 24px;
+  }
+`
+
+export const ConfirmLinkHome = styled(Link)`
+  background-color: ${colors.yellowLight};
+  color: ${colors.salmon};
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 4px 6px;
+  line-height: 16px;
+  display: block;
+  border: none;
+  width: 100%;
+  cursor: pointer;
+  text-align: center;
 `

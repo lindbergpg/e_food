@@ -4,13 +4,18 @@ import ProductsList from '../../components/ProductsList'
 import Presentation from '../../components/Presentation'
 import Header from '../../components/Header'
 import { useGetMenuQuery } from '../../services/api'
+import Loader from '../../components/Loader'
+
+type MenuParams = {
+  id: string
+}
 
 const Profile = () => {
-  const { id } = useParams()
-  const { data: restaurant } = useGetMenuQuery(id!)
+  const { id } = useParams() as MenuParams
+  const { data: restaurant, isLoading: isLoadingMenu } = useGetMenuQuery(id)
 
   if (!restaurant) {
-    return <h3>Carregando...</h3>
+    return <Loader />
   }
 
   return (
@@ -21,7 +26,11 @@ const Profile = () => {
         titulo={restaurant.titulo}
         capa={restaurant.capa}
       />
-      <ProductsList key={restaurant.id} items={restaurant.cardapio} />
+      <ProductsList
+        key={restaurant.id}
+        items={restaurant.cardapio}
+        isLoading={isLoadingMenu}
+      />
     </>
   )
 }

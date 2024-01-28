@@ -1,14 +1,7 @@
-import {
-  ContainerTop,
-  RestaurantCard,
-  Capa,
-  ContainerInfos,
-  Titulo,
-  Descricao,
-  TagCard
-} from './styles'
 import Button from '../Button'
 import Tag from '../Tag'
+
+import * as S from './styles'
 
 export type Props = {
   titulo: string
@@ -32,21 +25,21 @@ const Restaurant = ({
   id
 }: Props) => {
   return (
-    <RestaurantCard className="container">
-      <Capa src={capa} alt={titulo} />
-      <TagCard>
+    <S.RestaurantCard className="container">
+      <S.Cover src={capa} alt={titulo} />
+      <S.TagCard>
         {destacado === true ? <Tag>Destaque da semana</Tag> : ''}
         <Tag>{tipo}</Tag>
-      </TagCard>
-      <ContainerInfos>
-        <ContainerTop>
-          <Titulo>{titulo}</Titulo>
+      </S.TagCard>
+      <S.ContainerInfos>
+        <S.ContainerTop>
+          <S.Title>{titulo}</S.Title>
           <div>
-            <Titulo>{avaliacao}</Titulo>
+            <S.Title>{avaliacao}</S.Title>
             <img src={estrela} alt="Estrela" />
           </div>
-        </ContainerTop>
-        <Descricao>{descricao}</Descricao>
+        </S.ContainerTop>
+        <S.Description>{descricao}</S.Description>
         <Button
           type="link"
           to={`/perfil/${id}`}
@@ -54,8 +47,8 @@ const Restaurant = ({
         >
           Saiba mais
         </Button>
-      </ContainerInfos>
-    </RestaurantCard>
+      </S.ContainerInfos>
+    </S.RestaurantCard>
   )
 }
 

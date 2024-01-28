@@ -17,7 +17,6 @@ export const ProductName = styled.h3`
   font-weight: 900;
   line-height: 19px;
   padding-top: 4px;
-
   color: ${colors.yellowLight};
 `
 

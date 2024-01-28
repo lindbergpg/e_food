@@ -1,18 +1,11 @@
 import { useDispatch, useSelector } from 'react-redux'
 
-import {
-  HeaderHome,
-  HeaderHomeContainer,
-  HeaderProd,
-  HeaderProdContainer,
-  LinkHome,
-  CartButton
-} from './styles'
-
 import logo from '../../assets/image/logo.svg'
 
 import { open } from '../../store/reducers/cart'
 import { RootReducer } from '../../store'
+
+import * as S from './styles'
 
 type Props = {
   headerHome: boolean
@@ -30,30 +23,34 @@ const Header = ({ headerHome }: Props) => {
     <>
       <div>
         {headerHome ? (
-          <HeaderHome>
+          <S.HeaderHome>
             <div className="container">
-              <HeaderHomeContainer>
-                <LinkHome to="/">
-                  <img src={logo} alt="efood" />
-                </LinkHome>
+              <S.HeaderHomeContainer>
+                <S.LinkHome to="/">
+                  <h1>
+                    <img src={logo} alt="efood" />
+                  </h1>
+                </S.LinkHome>
                 <h1>Viva experiências gastronômicas no conforto da sua casa</h1>
-              </HeaderHomeContainer>
+              </S.HeaderHomeContainer>
             </div>
-          </HeaderHome>
+          </S.HeaderHome>
         ) : (
-          <HeaderProd>
+          <S.HeaderProd>
             <div className="container">
-              <HeaderProdContainer>
+              <S.HeaderProdContainer>
                 <p>Restaurantes</p>
-                <LinkHome to="/">
-                  <img src={logo} alt="efood" />
-                </LinkHome>
-                <CartButton onClick={openCart}>
+                <S.LinkHome to="/" title="Voltar para a página principal">
+                  <h1>
+                    <img src={logo} alt="efood" />
+                  </h1>
+                </S.LinkHome>
+                <S.CartButton onClick={openCart}>
                   {items.length} produto(s) no carrinho
-                </CartButton>
-              </HeaderProdContainer>
+                </S.CartButton>
+              </S.HeaderProdContainer>
             </div>
-          </HeaderProd>
+          </S.HeaderProd>
         )}
       </div>
     </>

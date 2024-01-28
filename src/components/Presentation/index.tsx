@@ -1,4 +1,4 @@
-import { BackgroundImage, Type, Name } from './styles'
+import * as S from './styles'
 
 type Props = {
   tipo: string
@@ -8,14 +8,14 @@ type Props = {
 
 const Presentation = ({ tipo, titulo, capa }: Props) => {
   return (
-    <BackgroundImage style={{ backgroundImage: `URL(${capa})` }}>
+    <S.BackgroundImage style={{ backgroundImage: `URL(${capa})` }}>
       <div className="container">
         <>
-          <Type>{tipo}</Type>
-          <Name>{titulo}</Name>
+          <S.Type>{tipo}</S.Type>
+          <S.Name>{titulo}</S.Name>
         </>
       </div>
-    </BackgroundImage>
+    </S.BackgroundImage>
   )
 }
 export default Presentation

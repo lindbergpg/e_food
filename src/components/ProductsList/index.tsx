@@ -1,36 +1,37 @@
 import Product from '../Product'
+import { parseToBrl } from '../../Utils'
+
 import { List } from './styles'
-import { CardapioItem } from '../../Pages/Home'
+import Loader from '../Loader'
 
 type Props = {
   items: CardapioItem[]
+  isLoading: boolean
 }
 
-export const formatPrice = (preco: number) => {
-  return new Intl.NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: 'BRL'
-  }).format(preco)
-}
+const ProductsList = ({ items, isLoading }: Props) => {
+  if (isLoading) {
+    return <Loader />
+  }
 
-const ProductsList = ({ items }: Props) => {
   return (
     <div className="container">
       <>
         <List>
-          {items.map((product) => (
-            <Product
-              product={product}
-              key={product.id}
-              foto={product.foto}
-              nome={product.nome}
-              descricao={product.descricao}
-              descricaomodal={product.descricao}
-              porcao={product.porcao}
-              preco={formatPrice(product.preco)}
-              id={product.id}
-            />
-          ))}
+          {items &&
+            items.map((product) => (
+              <Product
+                product={product}
+                key={product.id}
+                foto={product.foto}
+                nome={product.nome}
+                descricao={product.descricao}
+                descricaomodal={product.descricao}
+                porcao={product.porcao}
+                preco={parseToBrl(product.preco)}
+                id={product.id}
+              />
+            ))}
         </List>
       </>
     </div>

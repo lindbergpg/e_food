@@ -34,6 +34,10 @@ export const LinkHome = styled(Link)`
   @media (max-width: ${breackpoints.tablet}) {
     margin: 16px 0;
   }
+
+  h1 {
+    line-height: 0;
+  }
 `
 
 export const HeaderProd = styled.div`

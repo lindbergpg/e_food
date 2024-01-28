@@ -1,40 +1,40 @@
-import { FooterPag, FooterContainer, SocialMedia, LinkHome } from './styles'
-
 import logo from '../../assets/image/logo.svg'
 import instagram from '../../assets/image/instagram.svg'
 import facebook from '../../assets/image/facebook.svg'
 import twitter from '../../assets/image/twitter.svg'
 
+import * as S from './styles'
+
 const Footer = () => (
-  <FooterPag>
-    <FooterContainer className="container">
-      <LinkHome to="/">
+  <S.FooterPag>
+    <S.FooterContainer className="container">
+      <S.LinkHome to="/" title="Voltar para a página principal">
         <img src={logo} alt="efood" />
-      </LinkHome>
-      <SocialMedia>
+      </S.LinkHome>
+      <S.SocialMedia>
         <li>
-          <a href="#">
+          <a href="#" title="Visite a nossa página do instagram">
             <img src={instagram} alt="instagram" />
           </a>
         </li>
         <li>
-          <a href="#">
+          <a href="#" title="Visite a nossa página do facebook">
             <img src={facebook} alt="facebook" />
           </a>
         </li>
         <li>
-          <a href="#">
+          <a href="#" title="Visite a nossa página do twitter">
             <img src={twitter} alt="twitter" />
           </a>
         </li>
-      </SocialMedia>
+      </S.SocialMedia>
       <p>
         A efood é uma plataforma para divulgação de estabelecimentos, a
         responsabilidade pela entrega, qualidade dos produtos é toda do
         estabelecimento contratado.{' '}
       </p>
-    </FooterContainer>
-  </FooterPag>
+    </S.FooterContainer>
+  </S.FooterPag>
 )
 
 export default Footer
